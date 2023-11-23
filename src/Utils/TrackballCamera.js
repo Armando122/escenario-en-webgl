@@ -14,7 +14,7 @@ var CG = (function(CG) {
             // igual a la distancia entre la camara y el punto de interés
             this.radius = CG.Vector3.distance(this.pos, this.coi);
 
-            let direction = CG.Vector3.substract(this.pos, this.coi);
+            let direction = CG.Vector3.substract(this.coi, this.pos);
             // ancho
             this.theta = Math.atan2(direction.z, direction.x);
             // altura
@@ -44,8 +44,9 @@ var CG = (function(CG) {
          */
         rotate(init_mouse, current_mouse) {
             let angles = this.getAngles(init_mouse, current_mouse);
+            //this.theta = angles.theta;
 
-            this.pos.set(
+            this.coi.set(
                 this.radius * Math.cos(angles.phi) * Math.cos(angles.theta),
                 this.radius * Math.sin(angles.phi),
                 this.radius * Math.cos(angles.phi) * Math.sin(angles.theta)
@@ -85,83 +86,47 @@ var CG = (function(CG) {
          * Función que registra los eventos que ocurren con el mouse
          */
         registerMouseEvents(canvas/*, draw_callback*/) {
-            let initial_mouse_position = null;
 
-            canvas.addEventListener("mousedown", (evt) => {
-                initial_mouse_position = CG.getMousePositionInElement(evt, canvas);
-                window.addEventListener("mousemove", mousemove);
-            });
-
-            window.addEventListener("mouseup", (evt) => {
-                if (initial_mouse_position != null) {
-                    this.finishMove(initial_mouse_position, CG.getMousePositionInElement(evt, canvas));
-                    window.removeEventListener("mousemove", mousemove);
-                }
-                initial_mouse_position = null;
-            });
-
-            let mousemove = (evt) => {
-                this.rotate(initial_mouse_position, CG.getMousePositionInElement(evt, canvas));
-                //draw_callback(this.val_esp, this.coef_amb, this.mat, this.valor_alpha);
-                let dib = this.dibujado;
-                dib(this.val_esp, this.coef_amb, this.mat, this.valor_alpha);
-            }
-
-            /*window.addEventListener("keydown", (evt) => {
-                if (evt.key == "ArrowUp") {
-                    this.pos = new CG.Vector3(this.pos.x, this.pos.y+0.5, this.pos.z);
-                    this.coi = new CG.Vector3(this.coi.x, this.coi.y+0.5, this.coi.z);
+            window.addEventListener("keydown", (evt) => {
+                if (evt.key == "w") {
+                    this.pos = new CG.Vector3(this.pos.x, this.pos.y, this.pos.z-0.5);
+                    this.coi = new CG.Vector3(this.coi.x, this.coi.y, this.coi.z-0.5);
 
                     this.radius = CG.Vector3.distance(this.pos, this.coi);
-                    let direction = CG.Vector3.substract(this.pos, this.coi);
+                    let direction = CG.Vector3.substract(this.coi, this.pos);
                     this.theta = Math.atan2(direction.z, direction.x);
                     this.phi = Math.atan2(direction.y, direction.z);
                     window.addEventListener("keydown", keymove);
                 }
-                if (evt.key == "ArrowDown") {
-                    this.pos = new CG.Vector3(this.pos.x, this.pos.y-0.5, this.pos.z);
-                    this.coi = new CG.Vector3(this.coi.x, this.coi.y-0.5, this.coi.z);
-
-                    // Parámetros para construir esfera de la vista construyendo una esfera de radio
-                    // igual a la distancia entre la camara y el punto de interés
-                    this.radius = CG.Vector3.distance(this.pos, this.coi);
-
-                    let direction = CG.Vector3.substract(this.pos, this.coi);
-                    // ancho
-                    this.theta = Math.atan2(direction.z, direction.x);
-                    // altura
-                    this.phi = Math.atan2(direction.y, direction.z);
-                    window.addEventListener("keydown", keymove);  
-                }
-                if (evt.key == "ArrowLeft") {
+                if (evt.key == "a") {
                     this.pos = new CG.Vector3(this.pos.x-0.5, this.pos.y, this.pos.z);
                     this.coi = new CG.Vector3(this.coi.x-0.5, this.coi.y, this.coi.z);
 
-                    // Parámetros para construir esfera de la vista construyendo una esfera de radio
-                    // igual a la distancia entre la camara y el punto de interés
                     this.radius = CG.Vector3.distance(this.pos, this.coi);
-
-                    let direction = CG.Vector3.substract(this.pos, this.coi);
-                    // ancho
+                    let direction = CG.Vector3.substract(this.coi, this.pos);
                     this.theta = Math.atan2(direction.z, direction.x);
-                    // altura
                     this.phi = Math.atan2(direction.y, direction.z);
-                    window.addEventListener("keydown", keymove);   
+                    window.addEventListener("keydown", keymove);
                 }
-                if (evt.key == "ArrowRight") {
+                if (evt.key == "s") {
+                    this.pos = new CG.Vector3(this.pos.x, this.pos.y, this.pos.z+0.5);
+                    this.coi = new CG.Vector3(this.coi.x, this.coi.y, this.coi.z+0.5);
+
+                    this.radius = CG.Vector3.distance(this.pos, this.coi);
+                    let direction = CG.Vector3.substract(this.coi, this.pos);
+                    this.theta = Math.atan2(direction.z, direction.x);
+                    this.phi = Math.atan2(direction.y, direction.z);
+                    window.addEventListener("keydown", keymove);
+                }
+                if (evt.key == "d") {
                     this.pos = new CG.Vector3(this.pos.x+0.5, this.pos.y, this.pos.z);
                     this.coi = new CG.Vector3(this.coi.x+0.5, this.coi.y, this.coi.z);
 
-                    // Parámetros para construir esfera de la vista construyendo una esfera de radio
-                    // igual a la distancia entre la camara y el punto de interés
                     this.radius = CG.Vector3.distance(this.pos, this.coi);
-
-                    let direction = CG.Vector3.substract(this.pos, this.coi);
-                    // ancho
+                    let direction = CG.Vector3.substract(this.coi, this.pos);
                     this.theta = Math.atan2(direction.z, direction.x);
-                    // altura
                     this.phi = Math.atan2(direction.y, direction.z);
-                    window.addEventListener("keydown", keymove); 
+                    window.addEventListener("keydown", keymove);
                 }
               });
 
@@ -172,7 +137,7 @@ var CG = (function(CG) {
               let keymove = (evt) => {
                 let dib = this.dibujado;
                 dib(this.val_esp, this.coef_amb, this.mat, this.valor_alpha);
-              }*/
+              }
         }
     }
 

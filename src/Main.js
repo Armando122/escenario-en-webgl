@@ -3,9 +3,6 @@ let gl, program, programW;
 window.addEventListener("load", async function(evt) {
     // se obtiene una referencia al canvas
     let canvas = document.getElementById("the_canvas");
-    let checkboWire = document.getElementById("wire_ckbx");
-    let checkboEspec = document.getElementById("especular_ckbx");
-    let checkboTexture = document.getElementById("texture_ckbx");
   
     // se obtiene una referencia al contexto de render de WebGL
     gl = canvas.getContext("webgl");
@@ -13,13 +10,19 @@ window.addEventListener("load", async function(evt) {
     // si el navegador no soporta WebGL la variable gl no está definida y se lanza una excepción
     if (!gl) throw "WebGL no soportado";
   
-    // se crean y posicionan los modelos geométricos, uno de cada tipo
+    // Escenario
     geometry = [
       new CG.Cilindro(
         gl, 
         [1, 0, 0, 1], 
         2, 2, 16, 16, 
         CG.Matrix4.translate(new CG.Vector3(-5, 0, -5))
+      ),
+      new CG.Cilindro(
+        gl, 
+        [1, 0, 0, 1], 
+        2, 2, 16, 16, 
+        CG.Matrix4.translate(new CG.Vector3(-5, 0, 50))
       ),
       new CG.Cono(
         gl, 
@@ -43,6 +46,11 @@ window.addEventListener("load", async function(evt) {
         [1, 0 , 1, 1], 
         2, 
         CG.Matrix4.translate(new CG.Vector3(0, 0, 0))
+      ),
+      new CG.Icosaedro(gl, 
+        [1, 0 , 1, 1], 
+        2, 
+        CG.Matrix4.translate(new CG.Vector3(0, -7, 10))
       ),
       new CG.Octaedro(
         gl, 
@@ -70,16 +78,6 @@ window.addEventListener("load", async function(evt) {
       ),
     ];
 
-    // Configuración de texturas
-    geometry[0].setTexture(await CG.loadImage("texturas/PavingStones133_2K-PNG_Color.png")); // Cilindro 
-    geometry[1].setTexture(await CG.loadImage("texturas/Tiles074_1K-PNG_Color.png")); // Cono 
-    geometry[2].setTexture(await CG.loadImage("texturas/Tiles074_1K-PNG_Color.png")); // Dodecaedro 
-    geometry[3].setTexture(await CG.loadImage("texturas/Grass004_2K-PNG_Color.png")); // Esfera 
-    geometry[4].setTexture(await CG.loadImage("texturas/Gravel023_2K-PNG_AmbientOcclusion.png")); // Icosaedro 
-    geometry[5].setTexture(await CG.loadImage("texturas/Tiles093_2K-PNG_Color.png")); // Octaedro 
-    geometry[6].setTexture(await CG.loadImage("texturas/Bricks086_1K-PNG_Color.png")); // Prisma rectangular 
-    geometry[7].setTexture(await CG.loadImage("texturas/WoodFloor051_2K-PNG_Color.png")); // Tetraedro 
-    geometry[8].setTexture(await CG.loadImage("texturas/PavingStones133_2K-PNG_Color.png")); // Toro 
 
     // se determina el color con el que se limpia la pantalla, en este caso un color negro transparente
     gl.clearColor(0, 0, 0, 0);
