@@ -128,7 +128,6 @@ var CG = (function(CG) {
                     this.phi = Math.atan2(direction.y, direction.z);
                     window.addEventListener("keydown", keymove);
                 }
-                
               });
 
               window.addEventListener("keyup", (evt) => {
