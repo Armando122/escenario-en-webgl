@@ -85,7 +85,7 @@ var CG = (function(CG) {
         /**
          * Función que registra los eventos que ocurren con el mouse
          */
-        registerMouseEvents(canvas/*, draw_callback*/) {
+        registerKeyboardEvents(canvas/*, draw_callback*/) {
 
             window.addEventListener("keydown", (evt) => {
                 if (evt.key == "w") {

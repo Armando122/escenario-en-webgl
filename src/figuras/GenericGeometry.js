@@ -20,67 +20,49 @@ var CG = (function(CG) {
             this.smoothNumElems = 0;
 
             // Se hacen los caćulos de buffers
-              let smooth_vertices = this.getVerticesW();
+            let smooth_vertices = this.getVerticesW();
 
-              let faces = this.getFaces();
-              let flat_vertices = this.getVertices();
-              let uVMap = this.getUV();
+            let faces = this.getFaces();
+            let flat_vertices = this.getVertices();
+            let uVMap = this.getUV();
 
-              // triángulos ordenados en el buffer
-              this.flatPositionBuffer = gl.createBuffer();
-              gl.bindBuffer(gl.ARRAY_BUFFER, this.flatPositionBuffer);
-              gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(flat_vertices), gl.STATIC_DRAW);
+            // triángulos ordenados en el buffer
+            this.flatPositionBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.flatPositionBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(flat_vertices), gl.STATIC_DRAW);
         
-              // triángulos indexados
-              this.smoothPositionBuffer = gl.createBuffer();
-              gl.bindBuffer(gl.ARRAY_BUFFER, this.smoothPositionBuffer);
-              gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(smooth_vertices), gl.STATIC_DRAW);
+            // triángulos indexados
+            this.smoothPositionBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.smoothPositionBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(smooth_vertices), gl.STATIC_DRAW);
 
-              /* Coordenadas UV */
-              this.UVBuffer = gl.createBuffer();
-              gl.bindBuffer(gl.ARRAY_BUFFER, this.UVBuffer);
-              gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uVMap), gl.STATIC_DRAW);
+            /* Coordenadas UV */
+            this.UVBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.UVBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uVMap), gl.STATIC_DRAW);
         
-              // los índices correspondientes
-              this.indicesBuffer = gl.createBuffer();
-              gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indicesBuffer);
-              gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(faces), gl.STATIC_DRAW);
+            // los índices correspondientes
+            this.indicesBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indicesBuffer);
+            gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(faces), gl.STATIC_DRAW);
         
-              // normales para drawArray
-              let flat_normals = this.getFlatNormals(flat_vertices);
-              this.flatNormalBuffer = gl.createBuffer();
-              gl.bindBuffer(gl.ARRAY_BUFFER, this.flatNormalBuffer);
-              gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(flat_normals), gl.STATIC_DRAW);
+            // normales para drawArray
+            let flat_normals = this.getFlatNormals(flat_vertices);
+            this.flatNormalBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.flatNormalBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(flat_normals), gl.STATIC_DRAW);
         
-              // normales para drawElements
-              let smooth_normals = this.getSmoothNormals(smooth_vertices, faces);
-              this.smoothNormalBuffer = gl.createBuffer();
-              gl.bindBuffer(gl.ARRAY_BUFFER, this.smoothNormalBuffer);
-              gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(smooth_normals), gl.STATIC_DRAW);
+            // normales para drawElements
+            let smooth_normals = this.getSmoothNormals(smooth_vertices, faces);
+            this.smoothNormalBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.smoothNormalBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(smooth_normals), gl.STATIC_DRAW);
         
-              // número de elementos en el buffer de datos plano
-              this.flatNumElements = flat_vertices.length/3;
+            // número de elementos en el buffer de datos plano
+            this.flatNumElements = flat_vertices.length/3;
         
-              // número de elementos en el buffer de datos suavizado
-              this.smoothNumElements = faces.length;
-            /*} else {
-              // En otro caso el objeto no está definido con caras suaves
-              let vertices = this.getVertices();
-              let normals = this.getFlatNormals(vertices);
-        
-              // creación del buffer de datos del prisma
-              this.flatPositionBuffer = gl.createBuffer();
-              gl.bindBuffer(gl.ARRAY_BUFFER, this.flatPositionBuffer);
-              gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-        
-              // creación del buffer de normales del prisma
-              this.flatNormalBuffer = gl.createBuffer();
-              gl.bindBuffer(gl.ARRAY_BUFFER, this.flatNormalBuffer);
-              gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
-              
-              // número de elementos que define el prisma
-              this.flatNumElements = vertices.length/3;
-            }*/
+            // número de elementos en el buffer de datos suavizado
+            this.smoothNumElements = faces.length;
         }
 
         /**

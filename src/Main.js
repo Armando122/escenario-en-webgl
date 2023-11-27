@@ -18,6 +18,12 @@ window.addEventListener("load", async function(evt) {
         2, 2, 16, 16, 
         CG.Matrix4.translate(new CG.Vector3(-5, 0, -5))
       ),
+      new CG.Plano(
+        gl,
+        [1, 0, 0, 1], 
+        6,6,
+        CG.Matrix4.translate(new CG.Vector3(0, -1, 0))
+      ),
       new CG.Cilindro(
         gl, 
         [1, 0, 0, 1], 
@@ -164,7 +170,7 @@ window.addEventListener("load", async function(evt) {
     // se dibujan los objetos
     draw(0,0.0685, new CG.DiffuseMaterial(gl), 0);
     
-    camera.registerMouseEvents(canvas/*, draw, val_esp, coef_amb, mat, valor_alpha*/);
+    camera.registerKeyboardEvents(canvas/*, draw, val_esp, coef_amb, mat, valor_alpha*/);
     //camera.registerKeyboardEvents(canvas);
     
     /*=== Eventos para dibujar las figuras en diferentes modos ===*/
