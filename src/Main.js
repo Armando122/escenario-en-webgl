@@ -12,17 +12,33 @@ window.addEventListener("load", async function(evt) {
   
     // Escenario
     geometry = [
+      // Museo
+      new CG.Plano(
+        gl,
+        [1, 0, 0, 1], 
+        50,50,
+        CG.Matrix4.translate(new CG.Vector3(0, -1, 0))
+      ),
+      //Terreno
+      new CG.Plano(
+        gl,
+        [0, 1, 1, 1], 
+        100,100,
+        CG.Matrix4.translate(new CG.Vector3(0, -1.5, 0))
+      ),
+      // Ambiente
+      new CG.PrismaRectangular(
+        gl, 
+        [1, 0.2, 0.3, 1], 
+        200, 100, 200, 
+        CG.Matrix4.translate(new CG.Vector3(0, 48, 0)),
+      ),
+
       new CG.Cilindro(
         gl, 
         [1, 0, 0, 1], 
         2, 2, 16, 16, 
         CG.Matrix4.translate(new CG.Vector3(-5, 0, -5))
-      ),
-      new CG.Plano(
-        gl,
-        [1, 0, 0, 1], 
-        6,6,
-        CG.Matrix4.translate(new CG.Vector3(0, -1, 0))
       ),
       new CG.Cilindro(
         gl, 

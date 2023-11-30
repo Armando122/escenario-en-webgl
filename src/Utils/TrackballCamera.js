@@ -9,70 +9,22 @@ var CG = (function(CG) {
             this.pos = pos;
             this.coi = coi;
             this.up = up;
-
-            // Parámetros para construir esfera de la vista construyendo una esfera de radio
-            // igual a la distancia entre la camara y el punto de interés
-            this.radius = CG.Vector3.distance(this.pos, this.coi);
-
-            let direction = CG.Vector3.substract(this.coi, this.pos);
-            // ancho
-            this.theta = Math.atan2(direction.z, direction.x);
-            // altura
-            this.phi = Math.atan2(direction.y, direction.z);
         }
 
         /**
-         * Función para obtener la matriz de la vista
+         * Función que devuelve la matriz de la vista
          */
         getMatrix() {
             return CG.Matrix4.lookAt(this.pos, this.coi, this.up);
         }
 
         /**
-         * Función para obtener el movimiento final que tendrá la camára
-         * después de una actualización.
-         */
-        finishMove(init_mouse, current_mouse) {
-            let angles = this.getAngles(init_mouse, current_mouse);
-
-            this.theta = angles.theta;
-            this.phi = angles.phi;
-        }
-
-        /**
-         * Obtener una rotación
-         */
-        rotate(init_mouse, current_mouse) {
-            let angles = this.getAngles(init_mouse, current_mouse);
-            //this.theta = angles.theta;
-
-            this.coi.set(
-                this.radius * Math.cos(angles.phi) * Math.cos(angles.theta),
-                this.radius * Math.sin(angles.phi),
-                this.radius * Math.cos(angles.phi) * Math.sin(angles.theta)
-            );
-        }
-
-        /**
-         * Función para calcular los ángulos theta y phi de la esfera de visión
-         */
-        getAngles(init_mouse, current_mouse) {
-            let theta = this.theta + (current_mouse.x - init_mouse.x)/100;
-            let phi = Math.min(
-                Math.max(
-                    this.phi + (current_mouse.y - init_mouse.y)/100,
-                    -Math.PI/2),
-                Math.PI/2
-                );
-
-            return {
-                theta: theta, 
-                phi: phi
-            };
-        }
-
-        /**
          * Función que modifica los parametros de dibujado relacionados con la camára
+         * @param
+         * @param
+         * @param
+         * @param
+         * @param
          */
         setDrawParams(dibujado, val_esp, coef_amb, mat, valor_alpha) {
             this.dibujado = dibujado;
@@ -83,49 +35,61 @@ var CG = (function(CG) {
         }
 
         /**
-         * Función que registra los eventos que ocurren con el mouse
+         * Función que registra los eventos que ocurren con el teclado
          */
-        registerKeyboardEvents(canvas/*, draw_callback*/) {
+        registerKeyboardEvents() {
 
             window.addEventListener("keydown", (evt) => {
                 if (evt.key == "w") {
                     this.pos = new CG.Vector3(this.pos.x, this.pos.y, this.pos.z-0.5);
                     this.coi = new CG.Vector3(this.coi.x, this.coi.y, this.coi.z-0.5);
-
-                    this.radius = CG.Vector3.distance(this.pos, this.coi);
-                    let direction = CG.Vector3.substract(this.coi, this.pos);
-                    this.theta = Math.atan2(direction.z, direction.x);
-                    this.phi = Math.atan2(direction.y, direction.z);
                     window.addEventListener("keydown", keymove);
                 }
                 if (evt.key == "a") {
                     this.pos = new CG.Vector3(this.pos.x-0.5, this.pos.y, this.pos.z);
                     this.coi = new CG.Vector3(this.coi.x-0.5, this.coi.y, this.coi.z);
-
-                    this.radius = CG.Vector3.distance(this.pos, this.coi);
-                    let direction = CG.Vector3.substract(this.coi, this.pos);
-                    this.theta = Math.atan2(direction.z, direction.x);
-                    this.phi = Math.atan2(direction.y, direction.z);
                     window.addEventListener("keydown", keymove);
                 }
                 if (evt.key == "s") {
                     this.pos = new CG.Vector3(this.pos.x, this.pos.y, this.pos.z+0.5);
                     this.coi = new CG.Vector3(this.coi.x, this.coi.y, this.coi.z+0.5);
-
-                    this.radius = CG.Vector3.distance(this.pos, this.coi);
-                    let direction = CG.Vector3.substract(this.coi, this.pos);
-                    this.theta = Math.atan2(direction.z, direction.x);
-                    this.phi = Math.atan2(direction.y, direction.z);
                     window.addEventListener("keydown", keymove);
                 }
                 if (evt.key == "d") {
                     this.pos = new CG.Vector3(this.pos.x+0.5, this.pos.y, this.pos.z);
                     this.coi = new CG.Vector3(this.coi.x+0.5, this.coi.y, this.coi.z);
+                    window.addEventListener("keydown", keymove);
+                }
+                if (evt.key == "ArrowUp") {
+                    this.coi = new CG.Vector3(this.coi.x, this.coi.y+0.5, this.coi.z);
+                    window.addEventListener("keydown", keymove);
+                }
+                if (evt.key == "ArrowDown") {
+                    this.coi = new CG.Vector3(this.coi.x, this.coi.y-0.5, this.coi.z);
+                    window.addEventListener("keydown", keymove);
+                }
 
-                    this.radius = CG.Vector3.distance(this.pos, this.coi);
-                    let direction = CG.Vector3.substract(this.coi, this.pos);
-                    this.theta = Math.atan2(direction.z, direction.x);
-                    this.phi = Math.atan2(direction.y, direction.z);
+                if (evt.key == "ArrowLeft") {
+                    let radianes = Math.PI/180;
+                    let giro = -5*radianes;
+                    let tempCoi = CG.Vector3.substract(this.coi, this.pos);
+                    tempCoi = new CG.Vector3(
+                        tempCoi.x*Math.cos(giro) - tempCoi.z*Math.sin(giro), 
+                        tempCoi.y, 
+                        tempCoi.x*Math.sin(giro) + tempCoi.z*Math.cos(giro));
+                    this.coi = CG.Vector3.add(tempCoi, this.pos);
+                    window.addEventListener("keydown", keymove);
+                }
+
+                if (evt.key == "ArrowRight") {
+                    let radianes = Math.PI/180;
+                    let giro = 5*radianes;
+                    let tempCoi = CG.Vector3.substract(this.coi, this.pos);
+                    tempCoi = new CG.Vector3(
+                        tempCoi.x*Math.cos(giro) - tempCoi.z*Math.sin(giro), 
+                        tempCoi.y, 
+                        tempCoi.x*Math.sin(giro) + tempCoi.z*Math.cos(giro));
+                    this.coi = CG.Vector3.add(tempCoi, this.pos);
                     window.addEventListener("keydown", keymove);
                 }
               });
