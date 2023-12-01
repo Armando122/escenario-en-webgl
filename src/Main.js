@@ -26,14 +26,14 @@ window.addEventListener("load", async function(evt) {
     let projectionMatrix = CG.Matrix4.perspective(75*Math.PI/180, aspect, zNear, zFar);
     // Se construye la camára
     let camera = new CG.TrackballCamera(
-      new CG.Vector3(0, 11, 7), //pos
-      new CG.Vector3(0, 0, 0),  //coi
+      new CG.Vector3(0, 21, 7), //pos
+      new CG.Vector3(0, 20, 0),  //coi
       new CG.Vector3(0, 1, 0)   //up
     );
 
     let viewMatrix;
     // Se construye la posición de la luz
-    let lightPosition = new CG.Vector4(0, 3, 0, 1);
+    let lightPosition = new CG.Vector4(0, 20, 0, 1);
     let lightPosView;
 
     
@@ -99,7 +99,7 @@ window.addEventListener("load", async function(evt) {
     // se dibujan los objetos
     draw(0,0.0685, new CG.DiffuseMaterial(gl), 0);
     
-    camera.registerKeyboardEvents(canvas/*, draw, val_esp, coef_amb, mat, valor_alpha*/);
+    camera.registerKeyboardEvents();
     //camera.registerKeyboardEvents(canvas);
     
     /*=== Eventos para dibujar las figuras en diferentes modos ===*/
