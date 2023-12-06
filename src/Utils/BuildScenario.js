@@ -1,20 +1,32 @@
 var CG = (function(CG) {
-    
       /**
-       * Devuelve la definición de los objetos del escenario 
+       * 
        */
-      function build() {
+      function wireframeGeometry() {
         let geometry = [
-            // Museo
+          
+        ];
+        return geometry;
+      }
+
+
+      /**
+       * Devuelve la definición de los objetos del escenario y la posición de las luces
+       * @returns {[GenericGeometry]} geometry
+       */
+      async function build() {
+        let geometry = [
+            [// Museo
             new CG.Plano(
               gl,
               [1, 0, 0, 1], 
               60,60,
               CG.Matrix4.translate(new CG.Vector3(0, -1, 0))
-            ),
+            ), 
+            new CG.Vector4(0, 20, 0, 1)],
 
             // Muebles
-            new CG.PrismaRectangular(
+            /*new CG.PrismaRectangular(
               gl, 
               [0, 1, 1, 1],
               15, 15, 15, 
@@ -44,18 +56,20 @@ var CG = (function(CG) {
               [0, 1, 1, 1],
               15, 15, 15, 
               CG.Matrix4.translate(new CG.Vector3(-30, 4, 30)),
-            ),
-            new CG.Plano(
+            ),*/
+            [new CG.Plano(
               gl, 
               [0, 1, 1, 1],
-              10, 16,
+              10, 14,
               CG.Matrix4.multiply(
-                CG.Matrix4.translate(new CG.Vector3(30, 4, 30)),
+                CG.Matrix4.translate(new CG.Vector3(30, 13, 30)),
                 CG.Matrix4.rotateX(80*Math.PI/180)
-              )
+              ),
+              await CG.loadImage("./texturas/Missing_Texture_JE4.png")
             ),
+            new CG.Vector4(30, 20, 32, 1)],
       
-            new CG.PrismaRectangular(
+            /*new CG.PrismaRectangular(
               gl, 
               [0, 1, 1, 1],
               15, 15, 15, 
@@ -80,7 +94,7 @@ var CG = (function(CG) {
               [0, 1, 1, 1], 
               100,100,
               CG.Matrix4.translate(new CG.Vector3(0, -1.5, 0))
-            ),
+            ),*/
             
             // Ambiente
             /*new CG.PrismaRectangular(
@@ -91,7 +105,7 @@ var CG = (function(CG) {
             ),*/
       
             // Expo Phong
-            new CG.Cilindro(
+            /*new CG.Cilindro(
               gl, 
               [1, 0, 0, 1], 
               2, 2, 16, 16, 
@@ -338,61 +352,6 @@ var CG = (function(CG) {
               CG.Matrix4.translate(new CG.Vector3(-35, 15, -33)),
             ),
 
-            // Expo Wireframe
-            new CG.Cilindro(
-              gl, 
-              [1, 0, 0, 1], 
-              2, 2, 16, 16, 
-              CG.Matrix4.translate(new CG.Vector3(-5, 14.2, 25))
-            ),
-            new CG.Cono(
-              gl, 
-              [0, 1, 0, 1], 
-              2, 2, 16, 16, 
-              CG.Matrix4.translate(new CG.Vector3(0, 14.2, 25))
-            ),
-            new CG.Dodecaedro(
-              gl, 
-              [0, 0, 1, 1], 
-              2, 
-              CG.Matrix4.translate(new CG.Vector3(5, 13, 25))
-            ),
-            new CG.Esfera(
-              gl, 
-              [0, 1, 1, 1],
-              2, 16, 16, 
-              CG.Matrix4.translate(new CG.Vector3(-5, 14.2, 30))
-            ),
-            new CG.Icosaedro(gl, 
-              [1, 0 , 1, 1], 
-              2, 
-              CG.Matrix4.translate(new CG.Vector3(0, 14.2, 30))
-            ),
-            new CG.Octaedro(
-              gl, 
-              [1, 1, 0, 1], 
-              2, 
-              CG.Matrix4.translate(new CG.Vector3(5, 14.2, 30))
-            ),
-            new CG.PrismaRectangular(
-              gl, 
-              [1, 0.2, 0.3, 1], 
-              2, 3, 4, 
-              CG.Matrix4.translate(new CG.Vector3(-5, 14.2, 35)),
-            ),
-            new CG.Tetraedro(
-              gl, 
-              [0.5, 0.5, 0.5, 1],
-              2, 
-              CG.Matrix4.translate(new CG.Vector3(0, 14.2, 35))
-            ),
-            new CG.Toro(
-              gl,
-              [0.25, 0.25, 0.25, 1], 
-              4, 1, 16, 16, 
-              CG.Matrix4.translate(new CG.Vector3(5, 14.2, 35))
-            ),
-
             // Expo Color Sólido
             new CG.Cilindro(
               gl, 
@@ -447,6 +406,61 @@ var CG = (function(CG) {
               4, 1, 16, 16, 
               CG.Matrix4.translate(new CG.Vector3(-25, 14.2, 35))
             ),
+
+            // Expo Wireframe
+          new CG.Cilindro(
+            gl, 
+            [1, 0, 0, 1], 
+            2, 2, 16, 16, 
+            CG.Matrix4.translate(new CG.Vector3(-5, 14.2, 25))
+          ),
+          new CG.Cono(
+            gl, 
+            [0, 1, 0, 1], 
+            2, 2, 16, 16, 
+            CG.Matrix4.translate(new CG.Vector3(0, 14.2, 25))
+          ),
+          new CG.Dodecaedro(
+            gl, 
+            [0, 0, 1, 1], 
+            2, 
+            CG.Matrix4.translate(new CG.Vector3(5, 13, 25))
+          ),
+          new CG.Esfera(
+            gl, 
+            [0, 1, 1, 1],
+            2, 16, 16, 
+            CG.Matrix4.translate(new CG.Vector3(-5, 14.2, 30))
+          ),
+          new CG.Icosaedro(gl, 
+            [1, 0 , 1, 1], 
+            2, 
+            CG.Matrix4.translate(new CG.Vector3(0, 14.2, 30))
+          ),
+          new CG.Octaedro(
+            gl, 
+            [1, 1, 0, 1], 
+            2, 
+            CG.Matrix4.translate(new CG.Vector3(5, 14.2, 30))
+          ),
+          new CG.PrismaRectangular(
+            gl, 
+            [1, 0.2, 0.3, 1], 
+            2, 3, 4, 
+            CG.Matrix4.translate(new CG.Vector3(-5, 14.2, 35)),
+          ),
+          new CG.Tetraedro(
+            gl, 
+            [0.5, 0.5, 0.5, 1],
+            2, 
+            CG.Matrix4.translate(new CG.Vector3(0, 14.2, 35))
+          ),
+          new CG.Toro(
+            gl,
+            [0.25, 0.25, 0.25, 1], 
+            4, 1, 16, 16, 
+            CG.Matrix4.translate(new CG.Vector3(5, 14.2, 35))
+          ),
             
             
             // Extra
@@ -455,11 +469,12 @@ var CG = (function(CG) {
               [1, 0, 0, 1], 
               2, 2, 16, 16, 
               CG.Matrix4.translate(new CG.Vector3(-5, 0, 50))
-            ),
+            ),*/
             ];
         return geometry;
       }
   
       CG.build = build;
+      CG.wireframeGeometry = wireframeGeometry;
       return CG;
 }(CG || {}));

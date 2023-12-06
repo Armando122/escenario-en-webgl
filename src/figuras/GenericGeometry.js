@@ -12,12 +12,34 @@ var CG = (function(CG) {
          * @param {Number[]} color
          * @param {Matrix4} initial_transform
          */
-        constructor(gl, color = [0,0,0,1], initial_transform = new CG.Matrix4()) {
+        constructor(gl, color = [0,0,0,1], initial_transform = new CG.Matrix4(), imagen) {
             this.smooth = false;
             this.color = color;
             this.initial_transform = initial_transform;
             this.flatNumElems = 0;
             this.smoothNumElems = 0;
+            let pixeles = new Uint8Array([this.color[0]*255, this.color[1]*255, this.color[2]*255, 255]);
+            this.imagen = imagen;          
+            
+            this.texture = gl.createTexture();
+            gl.activeTexture(gl.TEXTURE0);
+            gl.bindTexture(gl.TEXTURE_2D, this.texture);
+            
+            gl.texImage2D(
+              gl.TEXTURE_2D, 
+              0,
+              gl.RGBA,
+              1,
+              1,
+              0,
+              gl.RGBA, gl.UNSIGNED_BYTE, pixeles
+            );
+            
+            if (this.imagen) {
+              //gl.bindTexture(gl.TEXTURE_2D, this.texture);
+              gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this.imagen);
+              gl.generateMipmap(gl.TEXTURE_2D);
+            }
 
             // Se hacen los caćulos de buffers
             let smooth_vertices = this.getVerticesW();
@@ -69,11 +91,13 @@ var CG = (function(CG) {
          * Función que asigna una textura a la figura
          */
         setTexture(imagen) {
-          this.imagen = imagen;
-          this.texture = gl.createTexture();
-          gl.activeTexture(gl.TEXTURE0);
+          //this.imagen = imagen;
+          //this.texture = gl.createTexture();
+          let pixeles = new Uint8Array([255,0,0,255]);
+          //gl.activeTexture(gl.TEXTURE0);
           gl.bindTexture(gl.TEXTURE_2D, this.texture);
           gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this.imagen);
+          
           gl.generateMipmap(gl.TEXTURE_2D);
         }
         

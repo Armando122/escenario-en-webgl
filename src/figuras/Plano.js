@@ -10,11 +10,11 @@ var CG = (function(CG) {
          * @param {Number} length
          * @param {Matrix4} initial_transform
          */
-        constructor(gl, color, width, length, initial_transform) {
+        constructor(gl, color, width, length, initial_transform, imagen) {
             g_width = (width || 1);
             g_length = (length || 1);
 
-            super(gl, color, initial_transform);
+            super(gl, color, initial_transform, imagen);
         }
 
         /**
@@ -63,12 +63,12 @@ var CG = (function(CG) {
          */
         getUV() {
             return [
-                // Triángulo 1
+                // Triángulo 2
                 1, 1,
-                1, 0,
+                0, 1,
                 0, 0,
 
-                // Triángulo 2
+                // Triángulo 1
                 1, 1,
                 0, 0,
                 1, 0,

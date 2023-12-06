@@ -11,14 +11,14 @@ window.addEventListener("load", async function(evt) {
     if (!gl) throw "WebGL no soportado";
   
     // Escenario
-    geometry = CG.build();
-
-
+    geometry = await CG.build();
+    
+    
     // se determina el color con el que se limpia la pantalla, en este caso un color negro transparente
     gl.clearColor(0, 0, 0, 0);
     // se activa la prueba de profundidad, esto hace que se utilice el buffer de profundidad para determinar que píxeles se dibujan y cuales se descartan
     gl.enable(gl.DEPTH_TEST);
-  
+    
     /* ============= Camara ============= */
     let aspect = canvas.width/canvas.height;
     let zNear = 1;
@@ -26,84 +26,61 @@ window.addEventListener("load", async function(evt) {
     let projectionMatrix = CG.Matrix4.perspective(75*Math.PI/180, aspect, zNear, zFar);
     // Se construye la camára
     let camera = new CG.TrackballCamera(
-      new CG.Vector3(0, 21, 7), //pos
+      new CG.Vector3(0, 21, 50), //pos
       new CG.Vector3(0, 20, 0),  //coi
       new CG.Vector3(0, 1, 0)   //up
-    );
-
-    let viewMatrix;
-    // Se construye la posición de la luz
-    let lightPosition = new CG.Vector4(0, 20, 0, 1);
-    let lightPosView;
-
-    
-    /* ============= Camara ============= */
-  
-    // se encapsula el código de dibujo en una función
+      );
+      
+      let viewMatrix;
+      // Se construye la posición de la luz
+      let lightPosition/* = new CG.Vector4(0, 20, 0, 1)*/;
+      let lightPosView;
+      
+      
+      /* ============= Camara ============= */
+      
+      // se encapsula el código de dibujo en una función
     function draw(especular, coef_env, material, alpha_s) {
       camera.setDrawParams(draw, especular, coef_env, material, alpha_s);
   
       // se le indica a WebGL cual es el tamaño de la ventana donde se despliegan los gráficos
       gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-  
+      
       // se limpian tanto el buffer de color, como el buffer de profundidad
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
+      
       viewMatrix = camera.getMatrix();
-      lightPosView = viewMatrix.multiplyVector(lightPosition);
-  
-      // se itera sobre cada objeto geométrico definido
-      for (let i=0; i<geometry.length; i++) {
-        let figura = geometry[i];
+      
+      for (let i = 0; i < geometry.length; i++) {
+        let objetosDef = geometry[i];
+        for (let j = 0; j < objetosDef.length-1; j++) {
+          lightPosition = objetosDef[objetosDef.length-1];
+          lightPosView = viewMatrix.multiplyVector(lightPosition);
 
-        figura.draw(
-          gl, // referencia al contexto de render de WebGL
-          material,
-          projectionMatrix,
-          viewMatrix,
-          lightPosView,
-          coef_env,
-          1, // Coeficiente difuso
-          especular,
-          alpha_s
+          let figura = objetosDef[j];
+
+          figura.draw(
+            gl,
+            material,
+            projectionMatrix,
+            viewMatrix,
+            lightPosView,
+            coef_env,
+            1,
+            especular,
+            alpha_s
           );
+        }
       }
     }
-
-    /*================== MODO WIREFFRAME ==================*/
-    // se encapsula el código de dibujo en una función
-    function wireframe() {
-
-      camera.setDrawParams(wireframe);
-
-      // se define una matriz que combina las transformaciones de la vista y de proyección
-      let viewProjectionMatrixW = CG.Matrix4.multiply(projectionMatrix, camera.getMatrix());
-
-      // se le indica a WebGL cual es el tamaño de la ventana donde se despliegan los gráficos
-      gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-
-      // se limpian tanto el buffer de color, como el buffer de profundidad
-      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-      // se itera sobre cada objeto geométrico definido
-      for (let i=0; i<geometry.length; i++) {
-        // se dibuja la geometría
-        geometry[i].drawWireframe(
-          gl, // referencia al contexto de render de WebGL
-          viewProjectionMatrixW // la matriz de transformación de la vista y proyección
-        );
-      }
-    }
-    /*=====================================================*/
-  
+    
     // se dibujan los objetos
-    draw(0,0.0685, new CG.DiffuseMaterial(gl), 0);
+    draw(0,0.0685, /*new CG.DiffuseMaterial(gl)*/new CG.TextureMaterial(gl), 0);
     
     camera.registerKeyboardEvents();
-    //camera.registerKeyboardEvents(canvas);
     
     /*=== Eventos para dibujar las figuras en diferentes modos ===*/
-    checkboWire.addEventListener("change", function() {
+    /*checkboWire.addEventListener("change", function() {
       if (checkboWire.checked) {
         checkboEspec.disabled = true;
         checkboTexture.disabled = true;
@@ -122,9 +99,9 @@ window.addEventListener("load", async function(evt) {
           }
         }
       }
-    });
+    });*/
     
-    checkboEspec.addEventListener("change", function() {
+    /*checkboEspec.addEventListener("change", function() {
       if (checkboEspec.checked) {
         draw(1, 0.0685, new CG.PhongMaterial(gl), 5.0);  // Dibujado difuso y especular
       } else {
@@ -144,6 +121,6 @@ window.addEventListener("load", async function(evt) {
           draw(0, 0.0685, new CG.DiffuseMaterial(gl));  // Dibujado solo difuso
         }
       }
-    });
+    });*/
     
   });
