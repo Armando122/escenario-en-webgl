@@ -11,12 +11,12 @@ var CG = (function(CG) {
          * @param {Number} Nv
          * @param {Matrix4} initial_transform
          */
-        constructor(gl, color, radius, Nu, Nv, initial_transform) {
+        constructor(gl, color, radius, Nu, Nv, initial_transform, imagen) {
             g_radius = radius || 1;
             g_Nu = Nu || 2;
             g_Nv = Nv || 2;
 
-            super(gl, color, initial_transform);
+            super(gl, color, initial_transform, imagen);
         }
 
         /**

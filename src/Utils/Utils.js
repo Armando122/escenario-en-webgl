@@ -10,7 +10,6 @@ var CG = (function(CG) {
      */
     function loadImage(url) {
       return new Promise((resolve, reject) => {
-        // se crea una imagen
         const img = new Image();
         // se asocia al evento de carga de la imagen la resolución de la promesa
         // resolve(img) es una función de la Promesa que eventualmente devuelve la imagen
