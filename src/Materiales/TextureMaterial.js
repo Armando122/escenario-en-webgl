@@ -43,7 +43,7 @@ var CG = (function(CG) {
           vec3 fragment_normal = normalize(v_normal);
           float cos_angle = max(dot(fragment_normal, to_light), 0.0);
 
-          vec3 ambient = vec3(0.01, 0.01, 0.01);
+          vec3 ambient = vec3(0.05, 0.05, 0.05);
           vec4 color = texture2D(u_texture, v_texcoord);
           gl_FragColor = vec4(ambient + (vec3(color) * cos_angle ), color.a );
         }`;

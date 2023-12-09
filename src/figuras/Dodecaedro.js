@@ -10,12 +10,12 @@ var CG = (function(CG) {
          * @param {Number} width
          * @param {Matrix4} initial_transform
          */
-        constructor(gl, color, width, initial_transform) {
+        constructor(gl, color, width, initial_transform, imagen) {
             g_width = (width || 1)/Math.PI;
             g_width_d = g_width/goldenCons;
             g_width_m = g_width*goldenCons;
 
-            super(gl, color, initial_transform);
+            super(gl, color, initial_transform, imagen);
         }
 
         /**

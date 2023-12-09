@@ -11,12 +11,12 @@ var CG = (function(CG) {
        * @param {Matrix4} initial_transform
        * @param {Boolean} Smooth
        */
-      constructor(gl, color, width, height, length, initial_transform) {
+      constructor(gl, color, width, height, length, initial_transform, imagen) {
         g_width  = (width  || 1)/2;
         g_height = (height || 1)/2;
         g_length = (length || 1)/2;
 
-        super(gl, color, initial_transform);
+        super(gl, color, initial_transform, imagen);
       }
 
       /**
