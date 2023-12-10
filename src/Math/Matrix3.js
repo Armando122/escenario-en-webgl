@@ -18,7 +18,6 @@ var CG = (function(CG) {
                 return value == null;
             });
 
-            // Matriz identidad
             if (vacio) {
                 this.a00 = 1;
                 this.a01 = 0;
@@ -284,7 +283,7 @@ var CG = (function(CG) {
          * @param {Number} sx
          * @param {Number} sy
          * @return {Matrix3}
-         * Devuelve la matriz de escalamiento con sx en x y sy en y
+         * Devuelve la matriz de escalamiento con sx en x y sy en Y
          */
         static scale(sx, sy) {
             let mS = new Matrix3(

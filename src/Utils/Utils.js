@@ -1,7 +1,5 @@
 var CG = (function(CG) {
-    /*=======================================================*/
     // Funciones de utilería para la construcción de shaders y obtención de posición del mouse
-    /*=======================================================*/
 
     /**
      * Lee una images a partir de su dirección y devuelve una Promesa
@@ -11,19 +9,16 @@ var CG = (function(CG) {
     function loadImage(url) {
       return new Promise((resolve, reject) => {
         const img = new Image();
-        // se asocia al evento de carga de la imagen la resolución de la promesa
-        // resolve(img) es una función de la Promesa que eventualmente devuelve la imagen
         img.addEventListener("load", () => resolve(img));
-        // se asocia al evento de error de la imagen el rechazo de la promesa
-        // reject(err) es una función de la Promesa que eventualmente devuelve un error
         img.addEventListener("error", (err) => reject(err));
-        // se inicia la carga de la imagen
         img.src = url;
       });
     }
 
     /**
-     * Función que obtiene la posición del mouse
+     * Función que obtiene la posición del mouse en el canvas
+     * @param {Event} evt Evento que activa el mouse
+     * @param {*} element Elemento en el que se quiere obtener la posición del mouse
      */
     function getMousePositionInElement(evt, element) {
         const rect = element.getBoundingClientRect();
@@ -34,6 +29,9 @@ var CG = (function(CG) {
     
     /**
      * Función que crear un shader, dado un contexto de render, un tipo y el código fuente
+     * @param {WebGLRenderingContext} gl Contexto de render
+     * @param {*} type Tipo de shader
+     * @param {*} source Fuente del shader
      */
     function createShader(gl, type, source) {
         let shader = gl.createShader(type);
@@ -51,22 +49,24 @@ var CG = (function(CG) {
     }
 
     /**
-   * Función que toma un shader de vértices con uno de fragmentos y construye un programa
-   */
-  function createProgram(gl, vertexShader, fragmentShader) {
-    let program = gl.createProgram();
-    gl.attachShader(program, vertexShader);
-    gl.attachShader(program, fragmentShader);
-    gl.linkProgram(program);
-  
-    let success = gl.getProgramParameter(program, gl.LINK_STATUS);
-  
-    if (success) {
-      return program;
+     * Función que toma un shader de vértices con uno de fragmentos y construye un programa
+     * @param {WebGLRenderingContext} gl Contexto de render
+     * @param {*} vertexShader Shader de vértices
+     * @param {*} fragmentShader Shader de fragmentos
+     */
+    function createProgram(gl, vertexShader, fragmentShader) {
+      let program = gl.createProgram();
+      gl.attachShader(program, vertexShader);
+      gl.attachShader(program, fragmentShader);
+      gl.linkProgram(program);
+      let success = gl.getProgramParameter(program, gl.LINK_STATUS);
+    
+      if (success) {
+        return program;
+      }
+    
+      console.log(gl.getProgramInfoLog(program));
     }
-   
-    console.log(gl.getProgramInfoLog(program));
-  }
 
   CG.loadImage = loadImage;
   CG.getMousePositionInElement = getMousePositionInElement;

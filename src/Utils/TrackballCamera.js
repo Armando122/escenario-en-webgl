@@ -20,11 +20,11 @@ var CG = (function(CG) {
 
         /**
          * Función que modifica los parametros de dibujado relacionados con la camára
-         * @param
-         * @param
-         * @param
-         * @param
-         * @param
+         * @param {Function} dibujado Función que se usará para dibujar las figuras en cada actualización
+         * @param {Number} val_esp Valor del coeficiente especular
+         * @param {Number} coef_amb Valor del coeficiente ambiental
+         * @param {Material} mat Material que se usará para dibujar las figuras
+         * @param {Number} valor_alpha Valor del brillo especular
          */
         setDrawParams(dibujado, val_esp, coef_amb, mat, valor_alpha) {
             this.dibujado = dibujado;

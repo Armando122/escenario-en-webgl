@@ -7,15 +7,9 @@ var CG = (function(CG) {
          * En caso de no recibir valores devuelve (0,0,0)
          */
         constructor(x=0,y=0,z=0) {
-            /*if (x == NaN && y == NaN && z == NaN) {
-                this.x = 0;
-                this.y = 0;
-                this.z = 0;*/
-            //} else {
-                this.x = x;
-                this.y = y;
-                this.z = z;
-            //}
+            this.x = x;
+            this.y = y;
+            this.z = z;
         }
 
         /**
@@ -32,6 +26,12 @@ var CG = (function(CG) {
             return vect;
         }
 
+        /**
+         * @param {Vector3} u
+         * @param {Vector3} v
+         * @return {Vector3}
+         * Devuelve la resta de los vectores
+         */
         static substract(u, v) {
             return new Vector3(
               u.x - v.x,

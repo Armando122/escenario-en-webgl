@@ -3,7 +3,9 @@ var CG = (function(CG) {
 
     class Material {
         /**
-         * Constructor para materiales
+         * @param {WebGLRenderingContext} gl contexto de render
+         * @param {*} vertex_shader_source_code shader de vértices que se usará
+         * @param {*} fragment_shader_source_code shader de fragmentos que se usará
          */
         constructor(gl, vertex_shader_source_code, fragment_shader_source_code) {
             if (MATERIAL_CACHE[this.constructor.name]) {
@@ -27,13 +29,10 @@ var CG = (function(CG) {
          * @return Un objeto con todos los atributos de programa
          */
         getAttributes(gl) {
-            // Atributos se almacenan en un objeto tipo JSon
             let attributes = {};
             let tmp_attribute_name;
 
-            // getProgramParameter devuelve atributos en shaders de programa
             for (let i = 0, l = gl.getProgramParameter(this.program, gl.ACTIVE_ATTRIBUTES); i < l; i++) {
-                // getActiveAttrib accede a un atributo en particular
                 tmp_attribute_name = gl.getActiveAttrib(this.program, i).name;
 
                 attributes[tmp_attribute_name] = gl.getAttribLocation(this.program, tmp_attribute_name);
@@ -54,7 +53,6 @@ var CG = (function(CG) {
             for (let i = 0, l = gl.getProgramParameter(this.program, gl.ACTIVE_UNIFORMS); i < l; i++) {
                 tmp_uniform = gl.getActiveUniform(this.program, i);
 
-                // Para uniforms es necesario almacenar su tipo y tamaño
                 uniforms[tmp_uniform.name] = gl.getUniformLocation(this.program, tmp_uniform.name);
                 uniforms[tmp_uniform.name].type = tmp_uniform.type;
                 uniforms[tmp_uniform.name].size = tmp_uniform.size;
@@ -65,29 +63,23 @@ var CG = (function(CG) {
 
         /**
          * Función que asigna un valor a un atributo, relacionando un buffer de datos con el atributo
-         * @param {*} gl  El contexto de render de WebGL
-         * @param {*} name  Nombre del atributo
-         * @param {*} bufferData  El buffer de datos con el que se relaciona el atributo
-         * @param {*} size  El tamaño o cantidad de elementos que debe tomar el atributo del buffer de datos
-         * @param {*} type  El tipo de datos del buffer de datos
-         * @param {*} normalized  Parámetro que determina si los datos se normalizan
-         * @param {*} stride  Espaciado entre la extracción de datos
-         * @param {*} offset  Desplazamiento para obtener los datos
+         * @param {*} gl contexto de render
+         * @param {*} name  nombre del atributo
+         * @param {*} bufferData  buffer de datos con el que se relaciona el atributo
+         * @param {*} size tamaño de elementos que debe tomar el atributo del buffer de datos
+         * @param {*} type tipo de datos del buffer de datos
+         * @param {*} normalized determina si los datos se normalizan
+         * @param {*} stride espaciado entre la extracción de datos
+         * @param {*} offset desplazamiento para obtener los datos
          */
         setAttribute(gl, name, bufferData, size, type, normalized, stride, offset) {
-            // Se busca que programa asociado a material cuente con el atributo a cambiar
             let attr = this.attributes[name];
 
-            // Si existe se puede relacionar con el buffer de datos
             if (attr != undefined) {
-                // Se activa búffer de datos
                 gl.bindBuffer(gl.ARRAY_BUFFER, bufferData);
-                // Se activa atributo
                 gl.enableVertexAttribArray(attr);
-                // Se indica cómo tomar info de buffer
                 gl.vertexAttribPointer(attr, size, type, normalized, stride, offset);
             }
-            // En otro caso no existe y no se hace asignación alguna
         }
 
         /**
@@ -97,17 +89,11 @@ var CG = (function(CG) {
          * @param {*} data  El valor que se quiere asignar al uniforme
          */
         setUniform(gl, name, data) {
-            // se busca que el programa asociado con el material cuenta con el uniforme que se quiere cambiar
             let unif = this.uniforms[name];
   
-            // si el uniforme existe entonces se pude asignar el valor
             if (unif) {
-                // se obtiene el tipo de dato del uniforme
                 let type = unif.type;
-                // se obtiene el tamaño del uniforme
                 let size = unif.size;
-  
-                // con el tipo y el tamaño se puede llamar la función adecuada para pasar el valor al uniforme
   
                 if (type === gl.FLOAT && size > 1) {
                   gl.uniform1fv(unif, data);

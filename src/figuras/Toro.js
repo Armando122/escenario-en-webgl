@@ -3,14 +3,14 @@ var CG = (function(CG) {
 
     class Toro extends CG.GenericGeometry {
         /**
-         * Constructor de toro
-         * @param {WebGLRenderingContext} gl
-         * @param {Number[]} color
+         * @param {WebGLRenderingContext} gl contexto de render
+         * @param {Number[]} color color del toro
          * @param {Number} major_radius
          * @param {Number} minor_radius
-         * @param {Number} Nu
-         * @param {Number} Nv
-         * @param {Matrix4} initial_transform
+         * @param {Number} Nu Divisiones horizontales
+         * @param {Number} Nv Divisiones verticales
+         * @param {Matrix4} initial_transform Posición inicial
+         * @param {string} imagen Textura del toro
          */
         constructor(gl, color, major_radius, minor_radius, Nu, Nv, initial_transform, imagen) {
             g_R = (major_radius || 1)/2;
@@ -23,6 +23,7 @@ var CG = (function(CG) {
 
         /**
          * Función que devuelve los vértices del toro
+         * @returns {Number[]}
          */
         getVerticesW() {
             let vertices = [];
@@ -42,6 +43,7 @@ var CG = (function(CG) {
 
         /**
          * Función para obtener los vértices del toro explicitamente
+         * @returns {Number[]}
          */
         getVertices() {
             let verticesW = this.getVerticesW();
@@ -50,7 +52,6 @@ var CG = (function(CG) {
 
             for (let i = 0; i < faces.length; i++) {
                 let cara = faces[i];
-                // Construimos la cara
                 let j = 3 * cara;
                 vertices.push(
                     verticesW[j  ],
@@ -63,7 +64,8 @@ var CG = (function(CG) {
         }
 
         /**
-         * Función que devuelve las caras del cilindro
+         * Función que devuelve las caras del toro
+         * @returns {Number[]}
          */
         getFaces() {
             let faces = [];
@@ -71,9 +73,11 @@ var CG = (function(CG) {
             for (let i = 0; i < g_Nv; i++) {
                 for (let j = 0; j < g_Nu; j++) {
                   faces.push(
+                    // Triángulo 1
                     j +i*g_Nu,
                     j +(i+1)*g_Nu,
                     (j+1)%g_Nu +(i+1)*g_Nu,
+                    // Triángulo 2
                     (j+1)%g_Nu +i*g_Nu,
                     j +i*g_Nu,
                     (j+1)%g_Nu +(i+1)*g_Nu
@@ -86,19 +90,20 @@ var CG = (function(CG) {
 
         /**
          * Función que devuelve el mapeo uv de la textura
+         * @returns {Number[]}
          */
         getUV() {
             let mapeo = [];
   
-            // Rectangulos
             for (let i = 0; i < g_Nu; i++) {
                 for (let j = 0; j < g_Nv; j++) {
                     mapeo.push(
+                        // Triángulo 1
                         (j+1)/g_Nv, 1-(i/g_Nu),
                         (j+1)/g_Nv, 1-(i+1)/g_Nu,
                         j/g_Nv, 1-(i+1)/g_Nu,
-                        //j/g_Nv, 1-(i+1)/g_Nu,
 
+                        // Triángulo 2
                         j/g_Nv, 1-(i/g_Nu),
                         (j+1)/g_Nv, 1-(i/g_Nu),
                         j/g_Nv, 1-(i+1)/g_Nu,

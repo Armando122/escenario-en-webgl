@@ -542,6 +542,5 @@ var CG = (function(CG) {
       }
   
       CG.build = build;
-      CG.wireframeGeometry = wireframeGeometry;
       return CG;
 }(CG || {}));

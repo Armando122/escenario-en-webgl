@@ -4,11 +4,13 @@ var CG = (function(CG) {
     class Plano extends CG.GenericGeometry {
 
         /**
-         * @param {WebGLRenderingContext} gl
-         * @param {Number[]} color
-         * @param {Number} width
-         * @param {Number} length
-         * @param {Matrix4} initial_transform
+         * Coinstructor de plano
+         * @param {WebGLRenderingContext} gl contexto de render
+         * @param {Number[]} color color del plano
+         * @param {Number} width ancho del plano
+         * @param {Number} length largo del plano
+         * @param {Matrix4} initial_transform posicion inicial del plano
+         * @param {string} imagen textura del plano
          */
         constructor(gl, color, width, length, initial_transform, imagen) {
             g_width = (width || 1);
@@ -63,12 +65,12 @@ var CG = (function(CG) {
          */
         getUV() {
             return [
-                // Triángulo 2
+                // Triángulo 1
                 1, 1,
                 0, 1,
                 0, 0,
 
-                // Triángulo 1
+                // Triángulo 2
                 1, 1,
                 0, 0,
                 1, 0,
