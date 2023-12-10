@@ -2,7 +2,7 @@ var CG = (function(CG) {
 
     class FlatMaterial extends CG.Material {
       /**
-       * Material que solo dibuja las figuras utilizando el color especificado
+       * Material que dibuja las figuras utilizando el color especificado sin aplicar modelos de iluminación
        */
       constructor(gl) {
         let vertex_shader = `

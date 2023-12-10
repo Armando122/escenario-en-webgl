@@ -2,7 +2,7 @@ var CG = (function(CG) {
 
     class WireframeMaterial extends CG.Material {
       /**
-       * Constructor para wireframe material
+       * Material para el dibujado de figuras en modo wireframe
        */
       constructor(gl) {
         let vertex_shader = `

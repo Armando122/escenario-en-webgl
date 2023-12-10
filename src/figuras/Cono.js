@@ -4,13 +4,14 @@ var CG = (function(CG) {
     class Cono extends CG.GenericGeometry {
         /**
          * Constructor de cono
-         * @param {WebGLRenderingContext} gl
-         * @param {Number[]} color
-         * @param {Number} radius
-         * @param {Number} height
-         * @param {Number} Nu
-         * @param {Number} Nv
-         * @param {Matrix4} initial_transform
+         * @param {WebGLRenderingContext} gl Contexto de render
+         * @param {Number[]} color Color del cono
+         * @param {Number} radius Radio del cono
+         * @param {Number} height Altura del cono
+         * @param {Number} Nu Número de divisiones horizontales
+         * @param {Number} Nv Número de divisiones verticales
+         * @param {Matrix4} initial_transform Posición inicial del cono
+         * @param {string} imagen Dirección de la imagen utilizada como textura
          */
         constructor(gl, color, radius, height, Nu, Nv, initial_transform, imagen) {
             g_radius = (radius || 1);
@@ -23,6 +24,7 @@ var CG = (function(CG) {
 
         /**
          * Función que devuelve los vértices del cono
+         * @param {Number[]}
          */
         getVerticesW() {
             let vertices = [];
@@ -42,7 +44,8 @@ var CG = (function(CG) {
         }
 
         /**
-         * Función que devuelve los vértices del cono
+         * Función que devuelve los vértices del cono explicitamente
+         * @return {Number[]}
          */
         getVertices() {
             let verticesW = this.getVerticesW();
@@ -51,7 +54,7 @@ var CG = (function(CG) {
 
             for (let i = 0; i < faces.length; i++) {
                 let cara = faces[i];
-                // Construimos la cara
+
                 let j = 3 * cara;
                 vertices.push(
                     verticesW[j  ],
@@ -65,12 +68,14 @@ var CG = (function(CG) {
 
         /**
          * Función que devuelve las caras del cono
+         * @return {Number[]}
          */
         getFaces() {
             let faces = [];
             let vertices = this.getVerticesW();
             let leng = vertices.length/3;
 
+            // Trángulo superiores del cono
             for (let i = 0; i < g_Nu; i++) {
                 faces.push(
                     leng - 1, 
@@ -78,12 +83,17 @@ var CG = (function(CG) {
                     leng - 1 - g_Nu + i,
                     );
             }
+
+            // Rectángulos del cono
             for (let i = 0; i < g_Nv-1; i++) {
                 for (let j = 0; j < g_Nu; j++) {
                   faces.push(
-                    j + i*g_Nu, //1
-                    (j+1)%g_Nu +(i+1)*g_Nu, //1
-                    (j+1)%g_Nu +i*g_Nu, //1
+                    // Triángulo 1
+                    j + i*g_Nu,
+                    (j+1)%g_Nu +(i+1)*g_Nu,
+                    (j+1)%g_Nu +i*g_Nu,
+
+                    // Triángulo 2
                     j +(i+1)*g_Nu,
                     (j+1)%g_Nu +(i+1)*g_Nu,
                     j +i*g_Nu
@@ -95,7 +105,8 @@ var CG = (function(CG) {
         }
 
         /**
-         * Función que devuelve el mapeo uv de la textura
+         * Función que devuelve las coordenadas uv para el mapeo de la textura
+         * @return {Number[]}
          */
         getUV() {
           let mapeo = [];
@@ -105,11 +116,12 @@ var CG = (function(CG) {
           for (let i = g_Nv-1; i > 0; i--) {
               for (let j = 0; j < g_Nu+1; j++) {
                   mapeo.push(
+                    // Coordenas UV Triángulo 1
                     ((j*2)+1)/(2*g_Nu)-((i+1)*sum), 1-((i+1)/g_Nv),
                     ((j*2)+1)/(2*g_Nu)+(i*sum), 1-(i/g_Nv),
                     ((j*2)+1)/(2*g_Nu)+((i+1)*sum), 1-((i+1)/g_Nv),
 
-                    
+                    // Coordenas UV Triángulo 2
                     ((j*2)+1)/(2*g_Nu)-(i*sum), 1-(i/g_Nv),
                     ((j*2)+1)/(2*g_Nu)+(i*sum), 1-(i/g_Nv),
                     ((j*2)+1)/(2*g_Nu)-((i+1)*sum), 1-((i+1)/g_Nv),

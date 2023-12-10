@@ -5,10 +5,11 @@ var CG = (function(CG) {
     class Dodecaedro extends CG.GenericGeometry {
         /**
          * Constructor de dodecaedro
-         * @param {WebGLRenderingContext} gl
-         * @param {Number[]} color
-         * @param {Number} width
-         * @param {Matrix4} initial_transform
+         * @param {WebGLRenderingContext} gl Contexto de render
+         * @param {Number[]} color Color del dodecaedro
+         * @param {Number} width Ancho del dodecaedro
+         * @param {Matrix4} initial_transform Posición inicial del dodecaedro
+         * @param {string} imagen Dirección de la imagen que será usada como textura
          */
         constructor(gl, color, width, initial_transform, imagen) {
             g_width = (width || 1)/Math.PI;
@@ -19,7 +20,8 @@ var CG = (function(CG) {
         }
 
         /**
-         * Función que devuelve los vértices del dodecaedro, para usar en modo wireframe
+         * Función que devuelve los vértices del dodecaedro
+         * @returns {Number[]}
          */
         getVerticesW() {
             return [
@@ -47,51 +49,53 @@ var CG = (function(CG) {
         }
 
         /**
-         * Función que devuelve los vértices del dodecaedro, drawArrays
+         * Función que devuelve los vértices del dodecaedro explicitamente
+         * @returns {Number[]}
          */
         getVertices() {
             return [
                 g_width,g_width,g_width,  /*0 */  g_width,-g_width,g_width,  /*2 */  g_width_m,0,g_width_d,     /*16*/
                 g_width,g_width,g_width,  /*0 */  0,-g_width_d,g_width_m,    /*10*/  g_width,-g_width,g_width,  /*2 */
-                g_width,g_width,g_width,  /*0 */  0,g_width_d,g_width_m,     /*8 */  0,-g_width_d,g_width_m,    /*10*/    // Cara-p
+                g_width,g_width,g_width,  /*0 */  0,g_width_d,g_width_m,     /*8 */  0,-g_width_d,g_width_m,    /*10*/    // Cara 1
                 g_width_d,g_width_m,0,    /*12*/  g_width_m,0,-g_width_d,    /*17*/  g_width,g_width,-g_width,  /*1 */
                 g_width_d,g_width_m,0,    /*12*/  g_width_m,0,g_width_d,     /*16*/  g_width_m,0,-g_width_d,    /*17*/
-                g_width_d,g_width_m,0,    /*12*/  g_width,g_width,g_width,   /*0 */  g_width_m,0,g_width_d,     /*16*/    // Cara
+                g_width_d,g_width_m,0,    /*12*/  g_width,g_width,g_width,   /*0 */  g_width_m,0,g_width_d,     /*16*/    // Cara 2
                 0,g_width_d,g_width_m,    /*8 */  -g_width_d,g_width_m,0,    /*14*/  -g_width,g_width,g_width,  /*4 */
                 0,g_width_d,g_width_m,    /*8 */  g_width_d,g_width_m,0,     /*12*/  -g_width_d,g_width_m,0,    /*14*/
-                0,g_width_d,g_width_m,    /*8 */  g_width,g_width,g_width,   /*0 */  g_width_d,g_width_m,0,     /*12*/    // Cara 
+                0,g_width_d,g_width_m,    /*8 */  g_width,g_width,g_width,   /*0 */  g_width_d,g_width_m,0,     /*12*/    // Cara 3
                 g_width,-g_width,g_width, /*2 */  g_width_m,0,-g_width_d,    /*17*/  g_width_m,0,g_width_d,     /*16*/  
                 g_width,-g_width,g_width, /*2 */  g_width,-g_width,-g_width, /*3 */  g_width_m,0,-g_width_d,    /*17*/
-                g_width,-g_width,g_width, /*2 */  g_width_d,-g_width_m,0,    /*13*/  g_width,-g_width,-g_width, /*3 */    // Cara 
+                g_width,-g_width,g_width, /*2 */  g_width_d,-g_width_m,0,    /*13*/  g_width,-g_width,-g_width, /*3 */    // Cara 4
                 g_width_d,-g_width_m,0,   /*13*/  -g_width,-g_width,g_width, /*6 */  -g_width_d,-g_width_m,0,   /*15*/
                 g_width_d,-g_width_m,0,   /*13*/  0,-g_width_d,g_width_m,    /*10*/ -g_width,-g_width,g_width,  /*6 */
-                g_width_d,-g_width_m,0,   /*13*/  g_width,-g_width,g_width,  /*2 */ 0,-g_width_d,g_width_m,     /*10*/    // Cara 
+                g_width_d,-g_width_m,0,   /*13*/  g_width,-g_width,g_width,  /*2 */ 0,-g_width_d,g_width_m,     /*10*/    // Cara 5
                 -g_width,-g_width,g_width,/*6 */  -g_width,g_width,g_width,  /*4 */  -g_width_m,0,g_width_d,    /*18*/
                 -g_width,-g_width,g_width,/*6 */  0,g_width_d,g_width_m,     /*8 */  -g_width,g_width,g_width,  /*4 */
-                -g_width,-g_width,g_width,/*6 */  0,-g_width_d,g_width_m,    /*10*/  0,g_width_d,g_width_m,     /*8 */    // Cara-p 
+                -g_width,-g_width,g_width,/*6 */  0,-g_width_d,g_width_m,    /*10*/  0,g_width_d,g_width_m,     /*8 */    // Cara 6 
                 g_width,-g_width,-g_width,/*3 */  g_width,g_width,-g_width,  /*1 */  g_width_m,0,-g_width_d,    /*17*/
                 g_width,-g_width,-g_width,/*3 */  0,g_width_d,-g_width_m,    /*9 */  g_width,g_width,-g_width,  /*1 */
-                g_width,-g_width,-g_width,/*3 */  0,-g_width_d,-g_width_m,   /*11*/  0,g_width_d,-g_width_m,    /*9 */    // Cara 
+                g_width,-g_width,-g_width,/*3 */  0,-g_width_d,-g_width_m,   /*11*/  0,g_width_d,-g_width_m,    /*9 */    // Cara 7
                 g_width_d,-g_width_m,0,   /*13*/  0,-g_width_d,-g_width_m,   /*11*/  g_width,-g_width,-g_width, /*3 */
                 g_width_d,-g_width_m,0,   /*13*/  -g_width,-g_width,-g_width,/*7 */  0,-g_width_d,-g_width_m,   /*11*/
-                g_width_d,-g_width_m,0,   /*13*/  -g_width_d,-g_width_m,0,   /*15*/  -g_width,-g_width,-g_width,/*7 */    // Cara
+                g_width_d,-g_width_m,0,   /*13*/  -g_width_d,-g_width_m,0,   /*15*/  -g_width,-g_width,-g_width,/*7 */    // Cara 8
                 g_width,g_width,-g_width, /*1 */  -g_width_d,g_width_m,0,    /*14*/  g_width_d,g_width_m,0,     /*12*/
                 g_width,g_width,-g_width, /*1 */  -g_width,g_width,-g_width, /*5 */  -g_width_d,g_width_m,0,    /*14*/
-                g_width,g_width,-g_width, /*1 */  0,g_width_d,-g_width_m,    /*9 */  -g_width,g_width,-g_width, /*5 */    // Cara 
+                g_width,g_width,-g_width, /*1 */  0,g_width_d,-g_width_m,    /*9 */  -g_width,g_width,-g_width, /*5 */    // Cara 9
                 0,-g_width_d,-g_width_m,  /*11*/  -g_width,g_width,-g_width, /*5 */  0,g_width_d,-g_width_m,    /*9 */
                 0,-g_width_d,-g_width_m,  /*11*/  -g_width_m,0,-g_width_d,   /*19*/  -g_width,g_width,-g_width, /*5 */
-                0,-g_width_d,-g_width_m,  /*11*/  -g_width,-g_width,-g_width,/*7 */  -g_width_m,0,-g_width_d,   /*19*/    // Cara
+                0,-g_width_d,-g_width_m,  /*11*/  -g_width,-g_width,-g_width,/*7 */  -g_width_m,0,-g_width_d,   /*19*/    // Cara 10
                 -g_width,g_width,-g_width,/*5 */  -g_width,g_width,g_width,  /*4 */  -g_width_d,g_width_m,0,    /*14*/
                 -g_width,g_width,-g_width,/*5 */  -g_width_m,0,g_width_d,    /*18*/  -g_width,g_width,g_width,  /*4 */
-                -g_width,g_width,-g_width,/*5 */  -g_width_m,0,-g_width_d,   /*19*/  -g_width_m,0,g_width_d,    /*18*/    // Cara
+                -g_width,g_width,-g_width,/*5 */  -g_width_m,0,-g_width_d,   /*19*/  -g_width_m,0,g_width_d,    /*18*/    // Cara 11
                 -g_width,-g_width,g_width,/*6 */  -g_width,-g_width,-g_width,/*7 */  -g_width_d,-g_width_m,0,   /*15*/
                 -g_width,-g_width,g_width,/*6 */  -g_width_m,0,-g_width_d,   /*19*/  -g_width,-g_width,-g_width,/*7 */
-                -g_width,-g_width,g_width,/*6 */  -g_width_m,0,g_width_d,    /*18*/ -g_width_m,0,-g_width_d,   /*19*/    // Cara
+                -g_width,-g_width,g_width,/*6 */  -g_width_m,0,g_width_d,    /*18*/ -g_width_m,0,-g_width_d,    /*19*/    // Cara 12
             ];
         }
 
         /**
          * Función que devuelve las caras del dodecaedro
+         * @returns {Number[]}
          */
         getFaces() {
             return [
@@ -105,16 +109,16 @@ var CG = (function(CG) {
                 13,11,3,  13,7,11, 13,15,7,
                 1,14,12,  1,5,14, 1,9,5,
                 11,5,9,  11,19,5, 11,7,19,
-                5,4,14,  5,18,4,  5,19,18,         
+                5,4,14,  5,18,4,  5,19,18,       
                 6,7,15,  6,19,7,  6,18,19        
             ];
         }
 
         /**
-         * Función que devuelve el mapeo uv de la textura
+         * Función que devuelve las coordenadas uv para el mapeo de la textura}
+         * @returns {Number[]}
          */
         getUV() {
-            let altura = 2 * ((2/6)/(2*Math.tan(36*Math.PI/180)));
             return [
                 // Cara 1
                 0.5, 0.79212,

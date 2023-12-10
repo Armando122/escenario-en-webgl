@@ -64,7 +64,7 @@ var CG = (function(CG) {
 
         /**
          * @return {Array}
-         * Convierte la matriz en un arreglo.
+         * Convierte la matriz en un arreglo invirtiendo la matriz para que sea aceptada por WebGL
          */
         toArray() {
             return [this.a00, this.a10, this.a20, this.a30, this.a01, this.a11, this.a21, this.a31, this.a02, this.a12, this.a22, this.a32, this.a03, this.a13,
@@ -205,6 +205,8 @@ var CG = (function(CG) {
          * @param {Matrix4} m1
          * @param {Matrix4} m2
          * @return {Boolean}
+         * Devuelve true en caso de que sus argumentos sean aproximadamente iguales 0.000001
+         * falso en caso contrario.
          */
         static equals(m1,m2) {
             let arrAux = [Math.abs(m1.a00-m2.a00), Math.abs(m1.a01-m2.a01), Math.abs(m1.a02-m2.a02),Math.abs(m1.a03-m2.a03), 

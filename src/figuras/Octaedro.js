@@ -5,10 +5,11 @@ var CG = (function(CG) {
 
         /**
          * Constructor de octaedro
-         * @param {WebGLRenderingContext} gl
-         * @param {Number[]} color
-         * @param {Number} width
-         * @param {Matrix4} initial_transform
+         * @param {WebGLRenderingContext} gl contexto de render
+         * @param {Number[]} color color del octaedro
+         * @param {Number} width ancho del triángulo del octaedro
+         * @param {Matrix4} initial_transform posición inicial del octaedro
+         * @param {string} imagen imagen que se usará para la textura
          */
         constructor(gl, color, width, initial_transform, imagen) {
             g_width = (width || 1);
@@ -17,7 +18,8 @@ var CG = (function(CG) {
         }
 
         /**
-         * Función que devuelve el arreglo de vértices del octaedro para el modo wireframe
+         * Función que devuelve el arreglo de vértices del octaedro
+         * @returns {Number[]}
          */
         getVerticesW() {
             return [
@@ -31,7 +33,8 @@ var CG = (function(CG) {
         }
 
         /**
-         * Función que devuelve los vértices del octaedro para ser usado por drawArrays
+         * Función que devuelve los vértices del octaedro explicitamente
+         * @returns {Number[]}
          */
         getVertices() {
             return [
@@ -48,26 +51,27 @@ var CG = (function(CG) {
 
         /**
          * Función que devuelve las caras del octaedro
+         * @returns {Number[]}
          */
         getFaces() {
             return [
-                3, 0, 1, //
-                3, 2, 0, //
-                4, 1, 0, //
-                4, 0, 2, //
-                5, 3, 1, //
-                3, 5, 2, //
-                4, 5, 1, //
+                3, 0, 1,
+                3, 2, 0,
+                4, 1, 0,
+                4, 0, 2,
+                5, 3, 1,
+                3, 5, 2,
+                4, 5, 1,
                 5, 4, 2
             ];
         }
 
         /**
-         * Función que devuelve el mapeo uv de la textura
+         * Función que devuelve las coordenadas uv para el mapeo de la textura de la textura
+         * @returns {Number[]}
          */
         getUV() {
             let uSum = 4*g_width;
-            let altura = (g_width*Math.sqrt(3))/2;
             return [
                 // Cara 1
                 g_width/uSum, 0.5,

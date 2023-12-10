@@ -2,7 +2,7 @@ var CG = (function(CG) {
 
     class TextureMaterial extends CG.Material {
       /**
-       * Material que solo dibuja las figuras utilizando el color especificado
+       * Material que dibuja las figuras utilizandola textura especificada e iluminación difusa
        */
       constructor(gl) {
         let vertex_shader = `
