@@ -4,25 +4,27 @@ var CG = (function(CG) {
     class Cilindro extends CG.GenericGeometry {
         /**
          * Constructor de cilindro
-         * @param {WebGLRenderingContext} gl
-         * @param {Number[]} color
-         * @param {Number} radius
-         * @param {Number} height
-         * @param {Number} Nu
-         * @param {Number} Nv
-         * @param {Matrix4} initial_transform
+         * @param {WebGLRenderingContext} gl Contexto de render
+         * @param {Number[]} color color del cilindro
+         * @param {Number} radius radio del cilindro
+         * @param {Number} height altura del cilindro
+         * @param {Number} Nu Número de divisiones horizontales
+         * @param {Number} Nv Número de divisiones verticales
+         * @param {Matrix4} initial_transform Posición inicial del cilindro
+         * @param {string} imagen Dirección de la imagen que se usará como textura
          */
-        constructor(gl, color, radius, height, Nu, Nv, initial_transform) {
+        constructor(gl, color, radius, height, Nu, Nv, initial_transform, imagen) {
             g_radius = (radius || 1);
             g_height = (height || 1);
             g_Nu = Nu || 2;
             g_Nv = Nv || 2;
 
-            super(gl, color, initial_transform);
+            super(gl, color, initial_transform, imagen);
         }
 
         /**
          * Función que devuelve los vértices del cilindro
+         * @return {Number[]}
          */
         getVerticesW() {
             let vertices = [];
@@ -40,7 +42,8 @@ var CG = (function(CG) {
         }
 
         /**
-         * Función para obtener los vértices del cilindro explicitamente
+         * Función que devuelve los vértices del cilindro explicitamente
+         * @return {Number[]}
          */
         getVertices() {
             let verticesW = this.getVerticesW();
@@ -63,6 +66,7 @@ var CG = (function(CG) {
 
         /**
          * Función que devuelve las caras del cilindro
+         * @return {Number[]}
          */
         getFaces() {
             let faces = [];
@@ -70,9 +74,12 @@ var CG = (function(CG) {
             for (let i = 0; i < g_Nv-1; i++) {
                 for (let j = 0; j < g_Nu; j++) {
                   faces.push(
+                    // Triángulo 1
                     j +i*g_Nu,  
                     (j+1)%g_Nu +(i+1)*g_Nu,
                     (j+1)%g_Nu +i*g_Nu,
+
+                    // Triángulo 2
                     j +(i+1)*g_Nu,
                     (j+1)%g_Nu +(i+1)*g_Nu,
                     j +i*g_Nu
@@ -84,19 +91,21 @@ var CG = (function(CG) {
         }
 
         /**
-         * Función que devuelve el mapeo uv de la textura
+         * Función que devuelve las coordenas uv para el mapeo de texturas
+         * @return {Number[]}
          */
         getUV() {
             let mapeo = [];
   
-            // Rectangulos
             for (let i = 0; i < g_Nv; i++) {
                 for (let j = 0; j < g_Nu; j++) {
                     mapeo.push(
+                        // Coordenadas UV triángulo 1
                         j/g_Nu, 1-((i+1)/g_Nv),
                         (j+1)/g_Nu, 1-(i/g_Nv),
                         (j+1)/g_Nu, 1-(i+1)/g_Nv,
 
+                        // Coordenadas UV triángulo 2
                         j/g_Nu, 1-(i/g_Nv),
                         (j+1)/g_Nu, 1-(i/g_Nv),
                         j/g_Nu, 1-((i+1)/g_Nv),

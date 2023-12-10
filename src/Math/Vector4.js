@@ -5,7 +5,7 @@ var CG = (function(CG) {
          * @param {Number} y
          * @param {Number} z
          * @param {Number} w
-         * Constructor para vector4
+         * Constructor para vector4 si no recibe valores se devuelve el vector 0
          */
         constructor(x,y,z,w) {
             if (x == null && y == null && z == null && w == null) {

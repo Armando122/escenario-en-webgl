@@ -3,13 +3,13 @@ var CG = (function(CG) {
 
     class Tetraedro extends CG.GenericGeometry {
         /**
-         * @param {WebGLRenderingContext} gl
-         * @param {Number[]} color
-         * @param {Number} width
-         * @param {Matrix4} initial_transform
-         * Constructor de tetraedro
+         * @param {WebGLRenderingContext} gl contexto de render
+         * @param {Number[]} color color del tetraedro
+         * @param {Number} width ancho del tetraedro
+         * @param {Matrix4} initial_transform posición inicial
+         * @param {string} imagen textura del tetraedro
          */
-        constructor(gl, color, width, initial_transform) {
+        constructor(gl, color, width, initial_transform, imagen) {
             g_width = (width || 1);
 
             let anguloT = 2 * Math.PI/3;
@@ -19,11 +19,12 @@ var CG = (function(CG) {
             g_x0 = g_x * Math.cos(anguloT) + g_y * Math.sin(anguloT);
             g_y0 = -g_x * Math.sin(anguloT) + g_y * Math.cos(anguloT);
 
-            super(gl, color, initial_transform);
+            super(gl, color, initial_transform, imagen);
         }
 
         /**
          * Función que devuelve un arreglo con los vértices del tetraedro.
+         * @returns {Number[]}
          */
         getVerticesW() {
             return [
@@ -35,7 +36,8 @@ var CG = (function(CG) {
         }
 
         /**
-         * Función que devuelve el arreglo de vértices para ser usado por drawArrays
+         * Función que devuelve el arreglo de vértices explicitamente
+         * @returns {Number[]}
          */
         getVertices() {
             return [
@@ -48,6 +50,7 @@ var CG = (function(CG) {
 
         /**
          * Función que devuelve las caras de la figura
+         * @returns {Number[]}
          */
         getFaces() {
             return [
@@ -63,6 +66,7 @@ var CG = (function(CG) {
 
         /**
          * Función que devuelve el mapeo uv de la textura
+         * @returns {Number[]}
          */
         getUV() {
             let uSum = 3*g_width;

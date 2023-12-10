@@ -4,23 +4,25 @@ var CG = (function(CG) {
     class Esfera extends CG.GenericGeometry {
         /**
          * Constructor de esfera
-         * @param {WebGLRenderingContext} gl
-         * @param {Number[]} color
-         * @param {Number} radius
-         * @param {Number} Nu
-         * @param {Number} Nv
-         * @param {Matrix4} initial_transform
+         * @param {WebGLRenderingContext} gl contexto de render
+         * @param {Number[]} color color de la esfera
+         * @param {Number} radius radio de la esfera
+         * @param {Number} Nu Divisiones horizontales
+         * @param {Number} Nv Divisiones verticales
+         * @param {Matrix4} initial_transform Posición inicial de la esfera
+         * @param {string} imagen Dirección de la imagen que se usará como textura
          */
-        constructor(gl, color, radius, Nu, Nv, initial_transform) {
+        constructor(gl, color, radius, Nu, Nv, initial_transform, imagen) {
             g_radius = radius || 1;
             g_Nu = Nu || 2;
             g_Nv = Nv || 2;
 
-            super(gl, color, initial_transform);
+            super(gl, color, initial_transform, imagen);
         }
 
         /**
          * Función que devuelve los vértices de la esfera
+         * @returns {Number[]}
          */
         getVerticesW() {
             let vertices = [];
@@ -48,6 +50,7 @@ var CG = (function(CG) {
 
         /**
          * Función que devuelve los vértices de la esfera explicitamente
+         * @returns {Number[]}
          */
         getVertices() {
             let verticesW = this.getVerticesW();
@@ -56,7 +59,6 @@ var CG = (function(CG) {
 
             for (let i = 0; i < faces.length; i++) {
                 let cara = faces[i];
-                // Construimos la cara
                 let j = 3 * cara;
                 vertices.push(
                     verticesW[j  ],
@@ -70,9 +72,11 @@ var CG = (function(CG) {
 
         /**
          * Función que devuelve las caras de la esfera
+         * @returns {Number[]}
          */
         getFaces() {
             let faces = [];
+            // Triángulos de círculo superior
             for (let i = 0; i < g_Nv; i++) {
                 faces.push(
                     0,
@@ -80,18 +84,24 @@ var CG = (function(CG) {
                     (i%g_Nv)+1
                   );
             }
+            // Rectángulos intermedios
             for (let i = 1; i < g_Nu-1; i++) {
                 for (let j = 0; j < g_Nv; j++) {
                   faces.push(
-                    j+1 +(i-1)*g_Nv, //1
-                    (j+1)%g_Nv +1 +(i-1)*g_Nv, //1
-                    (j+1)%g_Nv +1 +i*g_Nv, //1
-                    j+1 +i*g_Nv, //2
-                    j+1 +(i-1)*g_Nv, //2
+                    // Triángulo 1
+                    j+1 +(i-1)*g_Nv,
+                    (j+1)%g_Nv +1 +(i-1)*g_Nv,
+                    (j+1)%g_Nv +1 +i*g_Nv,
+
+                    // Triángulo 2
+                    j+1 +i*g_Nv,
+                    j+1 +(i-1)*g_Nv,
                     (j+1)%g_Nv +1 +i*g_Nv,
                   );
                 }
             }
+
+            // Triángulos de círculo inferior
             let vertices = this.getVerticesW();
             let leng = vertices.length/3;
             for (let i = 0; i < g_Nv; i++) {
@@ -105,7 +115,8 @@ var CG = (function(CG) {
         }
 
         /**
-         * Función que devuelve el mapeo uv de la textura
+         * Función que devuelve las coordenadas uv para el mapeo de la textura
+         * @returns {Number[]}
          */
         getUV() {
             let mapeo = [];
@@ -117,7 +128,7 @@ var CG = (function(CG) {
                     (i*2)/(2*g_Nv), (g_Nu-1)/g_Nu,
                     ((i*2)+1)/(2*g_Nv), 1
                 );
-            }//96
+            }
 
             // Rectangulos
             for (let i = 1; i < g_Nu-1; i++) {
@@ -134,7 +145,7 @@ var CG = (function(CG) {
                 }
             }
 
-            // Tirángulos inferiores
+            // Triángulos inferiores
             for (let i = 0; i < g_Nv; i++) {
                 mapeo.push(
                     ((i+1)*2)/(2*g_Nv), 1/g_Nu,

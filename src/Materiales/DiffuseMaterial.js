@@ -2,7 +2,7 @@ var CG = (function(CG) {
 
     class DiffuseMaterial extends CG.Material {
       /**
-       * Material que solo dibuja las figuras utilizando el color especificado
+       * Material que dibuja las figuras utilizando el color especificado y el modelo de iluminación difusa
        */
       constructor(gl) {
         let vertex_shader = `
@@ -27,34 +27,25 @@ var CG = (function(CG) {
           varying vec3 v_position;
           varying vec3 v_normal;
         
-          // Posición de la luz
           uniform vec3 u_light_position;
-          // Color del objeto
           uniform vec4 u_color;
-          // Color de la luz ambiental
           uniform vec3 l_a;
-          // Coeficiente ambiental
           uniform float k_a;
-          // Color de la luz difusa
           uniform vec3 l_d;
-          // Coeficiente difuso
           uniform float k_d;
         
           void main() {
             vec3 to_light = normalize( u_light_position - v_position );
-            vec3 fragment_normal = normalize(v_normal);  // N
+            vec3 fragment_normal = normalize(v_normal);
         
-            // I_p ambiental
             vec3 env_ip = k_a * l_a;
         
-            // I_p difuso
             float cos_angle = max(dot(fragment_normal, to_light), 0.0);
             vec3 dif_ip = k_d * l_d * cos_angle;
         
-            // I_p total
             vec3 ip = env_ip + dif_ip;
         
-            // Calculo de relfexión difusa
+            // Calculo de reflexión difusa
             gl_FragColor = vec4(ip, u_color.a);
           }`;
   
